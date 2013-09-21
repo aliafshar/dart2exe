@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-  "path/filepath"
+	"path/filepath"
 )
 
 func main() {
@@ -13,9 +13,9 @@ func main() {
 	builder.Generate()
 	builder.CopyMain()
 	builder.Compile()
-  exec, err := filepath.Rel(env.cwd, env.buildBinExec)
-  if err != nil {
-    exec = env.buildBinExec
-  }
+	exec, err := filepath.Rel(env.cwd, env.buildBinExec)
+	if err != nil {
+		exec = env.buildBinExec
+	}
 	log.Println("Generated:", exec)
 }

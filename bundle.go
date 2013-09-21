@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"path/filepath"
 	"os/exec"
+	"path/filepath"
 )
 
 func Update(env *Environ) error {
@@ -17,14 +17,13 @@ func Update(env *Environ) error {
 	return nil
 }
 
-
 func Bundle(env *Environ) error {
-	cmd := exec.Command("tar", "cvf",  env.zipPath, "-C", env.dartPkgPath, ".")
+	cmd := exec.Command("tar", "cvf", env.zipPath, "-C", env.dartPkgPath, ".")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Fatalln(string(out), err)
 	}
-	cmd = exec.Command("tar", "uvf",  env.zipPath, "-C", filepath.Dir(env.dartVmPath), "dart")
+	cmd = exec.Command("tar", "uvf", env.zipPath, "-C", filepath.Dir(env.dartVmPath), "dart")
 	out, err = cmd.CombinedOutput()
 	if err != nil {
 		log.Fatalln(string(out), err)

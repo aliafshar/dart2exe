@@ -1,9 +1,9 @@
 package main
 
 import (
-  "flag"
-  "log"
-  "os"
+	"flag"
+	"log"
+	"os"
 	"path/filepath"
 )
 
@@ -14,48 +14,48 @@ type Environ struct {
 	buildDir         string
 	buildSrcDir      string
 	buildBinDir      string
-  buildBinExec     string
+	buildBinExec     string
 	buildTmpDir      string
 	buildPkgDir      string
 	buildFuncPrefix  string
 	buildChunkSize   int
 	srcDir           string
 	dartVmPath       string
-	dartPubPath       string
-	dartPkgPath string
-  dartPkgName string
+	dartPubPath      string
+	dartPkgPath      string
+	dartPkgName      string
 	mainTemplateName string
 	mainTemplatePath string
-	zipName string
-	zipPath string
-  cwd string
+	zipName          string
+	zipPath          string
+	cwd              string
 }
 
 func NewEnviron() *Environ {
-  flag.Parse()
+	flag.Parse()
 	e := &Environ{
 		buildName:      "dart2exe",
 		buildChunkSize: 1024 * 32,
 		dartVmPath:     "/usr/local/dart/dart-sdk/bin/dart",
-		dartPubPath:     "/usr/local/dart/dart-sdk/bin/pub",
+		dartPubPath:    "/usr/local/dart/dart-sdk/bin/pub",
 	}
 	e.srcDir = getSrcDir()
-  cwd, err := os.Getwd()
-  if err != nil {
-    log.Fatalln(err)
-  }
-  e.cwd = cwd
-  if len(flag.Args()) == 0 {
-    e.dartPkgPath = filepath.Join(e.srcDir, "dart_test_app")
-  } else  {
-    e.dartPkgPath = flag.Arg(0)
-  }
-  e.dartPkgName = filepath.Base(e.dartPkgPath)
-  if len(flag.Args()) > 1 {
-    e.buildBinExec = flag.Arg(1)
-  } else {
-    e.buildBinExec = filepath.Join(e.cwd, e.dartPkgName + "_2exe")
-  }
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	e.cwd = cwd
+	if len(flag.Args()) == 0 {
+		e.dartPkgPath = filepath.Join(e.srcDir, "dart_test_app")
+	} else {
+		e.dartPkgPath = flag.Arg(0)
+	}
+	e.dartPkgName = filepath.Base(e.dartPkgPath)
+	if len(flag.Args()) > 1 {
+		e.buildBinExec = flag.Arg(1)
+	} else {
+		e.buildBinExec = filepath.Join(e.cwd, e.dartPkgName+"_2exe")
+	}
 	e.buildPkg = e.buildName + "_bootstrap"
 	e.buildPrefix = e.buildName + "-build-"
 	e.buildDir = createTempDir(e.buildPrefix)
