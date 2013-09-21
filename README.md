@@ -1,10 +1,9 @@
-Dart2Exe
+dart2exe
 --
 
 Convert console Dart applications into single executables containing the VM and
 all dependencies.
 
-Yeah, it's mostly a hack, but have a look.
 
 ```
 $ dart2exe ~/wrk/dart_test_app_2exe
@@ -32,10 +31,13 @@ I tested them. Pub works. Goodbye, world!
 
 How does it work?
 --
-We create a binary (using Go) that contains the Dart VM, your app, and all the
-dependencies. These tar'd and chopped into chunks. Each chunk is embedded as
-a literal byte array in Go source. These arrays are rejoined and unpacked into
-/tmp at runtime by a bootstrapper which just executes `dart bin/main.dart`.
+
+Yeah, it's mostly a hack.
+
+We create a binary (using Go) that contains everything you need tar'd and
+chopped into chunks. Each chunk is embedded as a literal byte array in Go
+source. These arrays are rejoined and unpacked into /tmp at runtime by
+a bootstrapper which just executes `dart bin/main.dart`.
 
 Performance
 --
