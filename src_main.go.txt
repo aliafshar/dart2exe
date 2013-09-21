@@ -1,0 +1,121 @@
+package main
+
+import (
+	"archive/tar"
+	"io"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
+)
+
+var runDir string
+var runTar string
+var runWrk string
+var runBin string
+var runSrc string
+
+func createRunDir() error {
+	path, err := ioutil.TempDir("/tmp", "dart2exe-run-")
+	if err != nil {
+		return err
+	}
+	runDir = path
+	runTar = filepath.Join(runDir, "dart2exe.tar")
+	runWrk = runDir
+	runBin = filepath.Join(runDir, "dart")
+	runSrc = filepath.Join(runDir, "bin", "main.dart")
+	return nil
+}
+
+func build() error {
+	f, err := os.Create(runTar)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	for _, getPart := range getParts() {
+		f.Write(getPart())
+	}
+	return nil
+}
+
+
+func unTar() error {
+	f, err := os.Open(runTar)
+	if err != nil {
+		return err
+	}
+	tr := tar.NewReader(f)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			// end of tar archive
+			break
+		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+		path := filepath.Join(runWrk, hdr.Name)
+		if hdr.Typeflag == 53 {
+			err = os.MkdirAll(path, 0700)
+			if err != nil {
+				log.Fatalln(err)
+			}
+		}
+		if hdr.Typeflag == 50 {
+			err = os.Symlink(hdr.Linkname, path)
+		}
+		if hdr.Typeflag == 48 {
+			err = os.MkdirAll(filepath.Dir(path), 0700)
+			dst, err := os.Create(path)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			defer dst.Close()
+			_, err = io.Copy(dst, tr)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			if hdr.Mode == 448 {
+				err = os.Chmod(path, 0775)
+			}
+		}
+	}
+	return nil
+}
+
+func run() {
+  // TODO command line args
+	cmd := exec.Command(runBin, runSrc)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	err := cmd.Start()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	cmd.Wait()
+}
+
+func main() {
+	if err := createRunDir(); err != nil {
+		log.Fatalln("Cannot build run dir.")
+	}
+	if err := build(); err != nil {
+		log.Fatalln("Cannot build dart vm.")
+	}
+	if err := unTar(); err != nil {
+		log.Fatalln("Cannot untar.")
+	}
+	run()
+}
+
+func getParts() []func() []byte {
+	return []func() []byte {
+		{{range .}}
+		{{.FuncName}},
+		{{end}}
+	}
+}

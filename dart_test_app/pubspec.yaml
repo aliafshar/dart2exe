@@ -1,0 +1,4 @@
+name: dart2exe_test_app
+description: Testing dart2exe
+dependencies:
+  crypto: any
