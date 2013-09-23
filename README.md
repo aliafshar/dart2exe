@@ -11,9 +11,11 @@ $ dart2exe ~/wrk/dart_test_app_2exe
 
 $ ./dart_test_app_2exe
 
-┏━ ┏━┃┏━┃━┏┛━━┃┏━┛┃ ┃┏━┛
-┃ ┃┏━┃┏┏┛ ┃ ┏━┛┏━┛ ┛ ┏━┛
-━━ ┛ ┛┛ ┛ ┛ ━━┛━━┛┛ ┛━━┛
+               __       
+    /      _/_   )      
+ __/__. __ / .--_ _., _ 
+(_/(_/|/ (<_(__<// /\</_
+
       
 I am Testing standard lib (math) and external (crypto) dependencies.
 --

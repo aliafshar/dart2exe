@@ -13,9 +13,9 @@ main() {
   print(
 """
 
-┏━ ┏━┃┏━┃━┏┛━━┃┏━┛┃ ┃┏━┛
-┃ ┃┏━┃┏┏┛ ┃ ┏━┛┏━┛ ┛ ┏━┛
-━━ ┛ ┛┛ ┛ ┛ ━━┛━━┛┛ ┛━━┛
+    /      _/_   )      
+ __/__. __ / .--_ _., _ 
+(_/(_/|/ (<_(__<// /\</_
 """);
   print('I am Testing standard lib (math) and external (crypto) dependencies.');
   print('--');
