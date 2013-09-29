@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart' as crypto;
 
 
-Future<String> getBytes() {
+String getBytes() {
   final r = new Random();
   final bs = new List<int>.generate(256, (i) => r.nextInt(255));
   return crypto.CryptoUtils.bytesToHex(bs);
